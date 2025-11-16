@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "lint": "echo \"No hay script de lint configurado. Añadir un linter real (eslint) y actualizar este script.\"",
+    "prepare": "husky"
   },
   "prettier": {
     "printWidth": 100,
