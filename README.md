@@ -1,59 +1,73 @@
-# Frontend
+# El Pollo Empoderado — Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.10.
+> Frontend Angular para el proyecto "El Pollo Empoderado" (interfaz pública y panel administrativo).
 
-## Development server
+## Descripción
 
-To start a local development server, run:
+Interfaz de usuario construida con Angular para gestionar la experiencia pública (home, menú, carrito, pedidos) y paneles administrativos. Proyecto en desarrollo — enfoque en modularidad y separación de features.
 
-```bash
-ng serve
-```
+## Requisitos
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- Node.js (recomendado v14+ / v16+)
+- npm (v6+)
+- Angular CLI (opcional para comandos `ng`)
 
-## Code scaffolding
+## Instalación
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+1. Clona el repositorio:
 
 ```bash
-ng generate --help
+git clone https://github.com/EmpowerChickenDev/El-Pollo-Empoderado-Frontend.git
+cd El-Pollo-Empoderado-Frontend
 ```
 
-## Building
-
-To build the project run:
+2. Instala dependencias:
 
 ```bash
-ng build
+npm install
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Comandos útiles
 
-## Running unit tests
+- `npm start` o `ng serve` — arranca la aplicación en modo desarrollo. Por defecto la app suele quedar disponible en `http://localhost:4200`.
+- `npm test` — ejecuta la suite de tests configurada.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+> Si prefieres usar Angular CLI directamente:
 
 ```bash
-ng test
+npx ng serve
+npx ng test
 ```
 
-## Running end-to-end tests
+## Estructura principal
 
-For end-to-end (e2e) testing, run:
+- `angular.json` — configuración del workspace Angular.
+- `package.json` — scripts y dependencias.
+- `src/` — código fuente de la aplicación:
+  - `src/main.ts` — punto de entrada.
+  - `src/index.html` — HTML principal.
+  - `src/styles.css` — estilos globales.
+  - `src/app/` — aplicación principal
+    - `app.ts`, `app.routes.ts`, `app.config.ts`, `app.html`, `app.css`
+    - `core/` — guards, interceptors, services, models
+    - `features/` — módulos por feature (auth, home, menu, cart, orders, admin)
+    - `layouts/` — layouts reutilizables (admin, blank, public)
+    - `shared/` — componentes, directivas, pipes, UI
 
-```bash
-ng e2e
-```
+## Buenas prácticas
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+- Mantener cada feature en su propio módulo dentro de `src/app/features/`.
+- Usar servicios en `core/services/` para lógica compartida y comunicación con APIs.
+- Añadir tests unitarios para componentes y servicios nuevos.
 
-## Additional Resources
+## Contribuir
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+1. Crea una rama con tu cambio: `git checkout -b feat/mi-cambio`
+2. Haz commits pequeños y descriptivos.
+3. Abre un pull request hacia `main` cuando tu cambio esté listo.
+
+## Convenciones y calidad de código
+
+- **Conventional Commits**: Este repositorio sigue las reglas de Conventional Commits para mensajes de commit (por ejemplo: `feat: agregar componente de menú`, `fix(cart): corregir cálculo de total`). Esto facilita el versionado semántico y la generación de changelogs.
+- **Husky**: Se utiliza `husky` para instalar hooks de Git que ejecutan comprobaciones antes de los commits/push. Los hooks típicos incluyen linting y validación de mensajes de commit (commitlint).
+- **ESLint**: El proyecto usa `eslint` (configurado con `angular-eslint`) para mantener la calidad y consistencia del código. Ejecuta el linter antes de commits y/o como parte de CI.
