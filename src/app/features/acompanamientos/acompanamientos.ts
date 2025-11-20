@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
     selector: 'app-acompanamientos',
     standalone: true,
     templateUrl: './acompanamientos.html',
-    styleUrls: ['../../shared/styles/menu-shared.css']
+    styleUrls: ['../../shared/Styles/menu-shared.css']
 })
 export class AcompComponent {}
