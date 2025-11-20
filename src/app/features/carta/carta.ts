@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
     selector: 'app-carta',
     standalone: true,
     templateUrl: './carta.html',
-    styleUrls: ['../../shared/styles/menu-shared.css']
+    styleUrls: ['../../shared/Styles/menu-shared.css']
 })
 export class CartaComponent {}
