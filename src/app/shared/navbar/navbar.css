@@ -1,0 +1,142 @@
+/* Fonts are loaded globally from `src/index.html` to avoid inlining during build */
+.navbar-container {
+    --color-principal: #e5133a;
+    --color-texto: #000;
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 14px;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.navbar-container {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+}
+
+.navbar {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 78px;
+    gap: 15px;
+    box-shadow: 0px 0px 1px 0px #000;
+}
+
+.navbar__logo {
+    width: 70px;
+    height: auto;
+}
+
+.icon__navbar {
+    font-size: 1.2em;
+}
+
+.bx-phone {
+    font-size: 1.4em;
+}
+
+.bx-user:hover {
+    color: var(--color-principal);
+}
+
+.icon-car__navbar:hover {
+    color: var(--color-principal);
+}
+
+.icon-car__navbar {
+    font-size: 1.4em;
+}
+
+.navbar__item {
+    flex-grow: 1;
+}
+
+.navbar__item:first-child {
+    margin: 0 0 0 25px;
+}
+
+.navbar__item:nth-child(2) {
+    justify-items: end;
+}
+
+.navbar__item:last-child {
+    justify-items: end;
+    margin: 0 25px 0 0;
+}
+
+.list__item {
+    list-style: none;
+    display: inline-block;
+    padding: 0 10px;
+}
+
+
+.list__link {
+    text-decoration: none;
+    color: var(--color-texto);
+    font-weight: 500;
+    font-size: 1.4em;
+}
+
+
+.list-login__link {
+    display: flex;
+    align-items: center;
+}
+
+.span-container {
+    display: inline-block;
+    margin: 0 0 0 5px;
+}
+
+.text-call:first-child {
+    display: block;
+    font-size: .7em;
+    color: #626262;
+    font-weight: bold;
+}
+
+.text-call-number {
+    letter-spacing: 1px;
+    font-size: .8em;
+    font-weight: bold;
+}
+
+.text-login {
+    font-size: .8em;
+}
+
+.text-login:first-child {
+    display: block;
+    font-weight: bold;
+}
+
+.text-login:last-child {
+    font-weight: 500;
+}
+
+.list_first__navbar {
+    padding: 0px 10px 18px 10px;
+    border-bottom: 5px solid var(--color-principal);
+    border-bottom-color: transparent;
+    transition: border-bottom-color 1s;
+}
+
+.list_first__navbar:hover {
+    border-bottom-color: var(--color-principal);
+}
+
+.bx-search {
+    position: relative;
+    font-size: 1.3em;
+    top: 5px;
+}
+

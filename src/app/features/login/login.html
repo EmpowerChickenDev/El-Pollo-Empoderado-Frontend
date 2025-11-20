@@ -1,0 +1,84 @@
+<link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" href="login.css">
+
+
+<div class="login-container">
+
+    <div class="login__item">
+        <div class="first__section">
+            <div class="welcome__container">
+                <span class="welcome__item">¡Pollos Empoderados! Llegamos con nueva web,</span>
+                <br>
+                <span class="welcome__item"><strong style="font-size: 1.4em;">Regístrate Nuevamente</strong> y celebra con nosotros</span>
+            </div>
+            <h1 class="login__title">
+                Iniciar Sesión
+            </h1>
+            <form class="form">
+                <div class="form__container">
+                    <div class="form__item">
+                        <label for="email" class="form__label">
+                            Correo Electrónico
+                        </label>
+                        <input class="form__input" id="email" type="email" placeholder="Ej. nombre@gmail.com" required>
+                    </div>
+                    <div class="form__item">
+                        <label for="password" class="form__label">
+                            Contraseña
+                        </label>
+                        <div class="password">
+                            <input class="form__input form-input__password" id="password" type="password" placeholder="Aa12345" required>
+                            <button class="btn__password" type="button" id="togglePassword" aria-label="Mostrar contraseña"title="Mostrar / Ocultar contraseña">
+                                <i class='bxr  bx-eye toggle-password' id="togglePassword"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form__item">
+                        <a href="#" routerLink="/register" class="form__link">
+                            Olvidé mi contraseña
+                        </a>
+                    </div>
+                    <div class="form__item">
+                        <button class="btn__login">Iniciar Sesión</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="register__item">
+        <div class="second__section">
+            <div class="secondSection__item">
+                <h2 class="second__title">Crear cuenta</h2>
+            </div>
+            <div class="secondSection__item">
+                <div>
+                    <h3>Crea una y aprovecha los beneficios:</h3>
+                </div>
+                <div>
+                    <ul class="list__login">
+                        <li class="list__item">
+                            Realiza tus compras de manera más ágil.
+                        </li>
+                        <li class="list__item">
+                            Guarda múltiples direcciones de envío y facturación.
+                        </li>
+                        <li class="list__item">
+                            Realiza el seguimiento a tus compras y revisa tus pedidos realizados.
+                        </li>
+                        <li class="list__item">
+                            Haz una lista de productos favoritos.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="secondSection__item">
+                <a routerLink="/register">
+                    <button class="btn__register">Crear Cuenta</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
