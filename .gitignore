@@ -48,7 +48,3 @@ Thumbs.db
 .env.prod
 .env.local
 .env.*.local
-
-# Environment TypeScript files (generados automáticamente)
-src/environments/environment.ts
-src/environments/environment.prod.ts
