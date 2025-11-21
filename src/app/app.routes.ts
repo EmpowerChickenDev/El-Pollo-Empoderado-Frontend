@@ -11,29 +11,48 @@ import { BebidasComponent } from './features/bebidas/bebidas';
 import { LocalesComponent } from './features/locales/locales.component';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout';
+import { PublicLayoutComponent } from './layouts/public-layout/public-layout';
 
 export const routes: Routes = [
-    { path: '', component: HomeComponent },
-
-    // Ruta de Menú con subrutas
+    // Rutas públicas (con navbar y footer)
     {
-        path: 'menu',
-        component: MenuComponent,
+        path: '',
+        component: PublicLayoutComponent,
         children: [
-            { path: '', redirectTo: 'promociones', pathMatch: 'full' },
-            { path: 'promociones', component: PromocionesComponent },
-            { path: 'carta', component: CartaComponent },
-            { path: 'acompanamientos', component: AcompComponent },
-            { path: 'bebidas', component: BebidasComponent }
+            { path: '', component: HomeComponent },
+            
+            // Ruta de Menú con subrutas
+            {
+                path: 'menu',
+                component: MenuComponent,
+                children: [
+                    { path: '', redirectTo: 'promociones', pathMatch: 'full' },
+                    { path: 'promociones', component: PromocionesComponent },
+                    { path: 'carta', component: CartaComponent },
+                    { path: 'acompanamientos', component: AcompComponent },
+                    { path: 'bebidas', component: BebidasComponent }
+                ]
+            },
+            
+            { path: 'locales', component: LocalesComponent },
+            { path: 'login', component: LoginComponent },
+            { path: 'register', component: RegisterComponent }
         ]
     },
 
-    // Ruta admin SIN navbar ni footer
-    { path: 'admin', component: AdminLayoutComponent },
-
-    { path: 'locales', component: LocalesComponent },
-    { path: 'login', component: LoginComponent },
-    { path: 'register', component: RegisterComponent },
+    // Rutas administrativas (SIN navbar ni footer)
+    {
+        path: 'admin',
+        component: AdminLayoutComponent,
+        children: [
+            { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+            { path: 'dashboard', component: AdminLayoutComponent },
+            // Aquí puedes agregar más rutas de admin cuando las crees
+            // { path: 'users', component: UsersManagementComponent },
+            // { path: 'orders', component: OrdersManagementComponent },
+            // etc.
+        ]
+    },
 
     { path: '**', redirectTo: '' }
 ];

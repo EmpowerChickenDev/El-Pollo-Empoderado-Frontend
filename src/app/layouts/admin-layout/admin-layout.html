@@ -109,7 +109,7 @@
 
   <!-- Contenido Principal -->
   <main class="main-content">
-    <!-- Dashboard -->
+    <!-- Contenido dinámico basado en activeSection -->
     <div *ngIf="activeSection === 'dashboard'" class="content-section">
       <div class="dashboard-header">
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXayfXZsp1nF9zkFfgDsUmdY8DZFktLTx_Bw&s" alt="El Pollo Empoderado" class="dashboard-logo">
@@ -170,22 +170,22 @@
     <!-- Mis Pedidos -->
     <div *ngIf="activeSection === 'pedidos'" class="content-section">
       <h1>Mis Pedidos</h1>
-      <!-- Aquí va el contenido de pedidos -->
       <p>Contenido de pedidos...</p>
     </div>
 
     <!-- Locales -->
     <div *ngIf="activeSection === 'locales'" class="content-section">
       <h1>Gestión de Locales</h1>
-      <!-- Aquí va el contenido de locales -->
       <p>Contenido de locales...</p>
     </div>
 
     <!-- Usuarios -->
     <div *ngIf="activeSection === 'usuarios'" class="content-section">
       <h1>Gestión de Usuarios</h1>
-      <!-- Aquí va el contenido de usuarios -->
       <p>Contenido de usuarios...</p>
     </div>
+
+    <!-- Router Outlet para futuras rutas hijas -->
+    <router-outlet></router-outlet>
   </main>
 </div>
