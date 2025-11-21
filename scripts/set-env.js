@@ -14,29 +14,23 @@ if (fs.existsSync(envFile)) {
   console.log(`✔ Archivo ${envFile} encontrado. Cargando variables...`);
   envConfig = dotenv.parse(fs.readFileSync(envFile));
 } else {
-  // 2️⃣ Si NO existe (ej: Vercel), usar process.env
+  // 2️⃣ Si NO existe (ej: Vercel), usar process.env con valores por defecto
   console.log(`⚠ Archivo ${envFile} NO encontrado. Usando variables de entorno del sistema (Vercel).`);
 
   envConfig = {
-    PRODUCTION: process.env.PRODUCTION,
-    API_URL: process.env.API_URL,
-    API_PREFIX: process.env.API_PREFIX,
-    API_VERSION: process.env.API_VERSION,
-    APP_NAME: process.env.APP_NAME,
-    ENABLE_DEBUG: process.env.ENABLE_DEBUG,
-    TOKEN_KEY: process.env.TOKEN_KEY,
+    PRODUCTION: process.env.PRODUCTION || (isProd ? 'true' : 'false'),
+    API_URL: process.env.API_URL || 'https://el-pollo-empoderado-backend-production.up.railway.app/',
+    API_PREFIX: process.env.API_PREFIX || '/api',
+    API_VERSION: process.env.API_VERSION || '',
+    APP_NAME: process.env.APP_NAME || 'El Pollo Empoderado',
+    ENABLE_DEBUG: process.env.ENABLE_DEBUG || (isProd ? 'false' : 'true'),
+    TOKEN_KEY: process.env.TOKEN_KEY || 'admin_token',
   };
 
-  // Verificar que las variables críticas estén definidas
-  const requiredVars = ['API_URL'];
-  const missingVars = requiredVars.filter(varName => !envConfig[varName]);
-  
-  if (missingVars.length > 0) {
-    console.error(`\n❌ ERROR: Las siguientes variables de entorno son requeridas pero no están definidas:`);
-    console.error(`   ${missingVars.join(', ')}`);
-    console.error(`\n📝 Por favor, configura estas variables en tu plataforma de deployment (Vercel, etc.)`);
-    console.error(`   Puedes usar los valores de .env.example como referencia.\n`);
-    process.exit(1);
+  // Advertencia si se está usando la API por defecto en producción
+  if (isProd && envConfig.API_URL === 'http://localhost:8080') {
+    console.warn(`\n⚠️  ADVERTENCIA: Usando API_URL por defecto (localhost) en modo PRODUCCIÓN`);
+    console.warn(`   Configura API_URL en tu plataforma de deployment para usar el backend correcto.\n`);
   }
 }
 
