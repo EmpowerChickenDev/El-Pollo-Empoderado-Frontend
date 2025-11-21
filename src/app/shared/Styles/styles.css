@@ -1,0 +1,46 @@
+:root {
+  /* Colores principales del logo */
+  --color-rojo-principal: #D32F2F;
+  --color-rojo-hover: #B71C1C;
+  --color-dorado: #FFA726;
+  --color-dorado-claro: #FFB74D;
+  --color-marron: #5D4037;
+  --color-marron-oscuro: #3E2723;
+  
+  /* Colores de fondo */
+  --color-crema: #FFF8E1;
+  --color-crema-claro: #FFFAF0;
+  
+  /* Colores de texto */
+  --color-texto-oscuro: #2c3e50;
+  --color-texto-gris: #7f8c8d;
+  --color-texto-claro: #95a5a6;
+  
+  /* Sombras */
+  --sombra-card: 0 4px 12px rgba(93, 64, 55, 0.15);
+  --sombra-card-hover: 0 8px 24px rgba(211, 47, 47, 0.2);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto Condensed", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #fafafa;
+  color: var(--color-texto-oscuro);
+  padding-top: 90px;
+}
+
+/* Clases utilitarias globales */
+.text-center {
+  text-align: center;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
