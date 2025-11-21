@@ -1,12 +1,12 @@
 // admin-layout.component.ts
 import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-admin-layout',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterOutlet],
   templateUrl: './admin-layout.html',
   styleUrls: ['./admin-layout.css']
 })
