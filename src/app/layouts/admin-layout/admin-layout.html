@@ -1,0 +1,191 @@
+<!-- admin-layout.component.html -->
+<div class="admin-container">
+  <!-- Barra Lateral -->
+  <aside class="sidebar">
+    <!-- Logo y Título -->
+    <div class="sidebar-header">
+      <div class="logo-container">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXayfXZsp1nF9zkFfgDsUmdY8DZFktLTx_Bw&s" alt="El Pollo Empoderado" class="logo">
+      </div>
+      <h2 class="admin-title">Dashboard</h2>
+    </div>
+
+    <!-- Menú de Navegación -->
+    <nav class="sidebar-nav">
+      <button 
+        class="nav-item" 
+        [class.active]="activeSection === 'dashboard'"
+        (click)="setActiveSection('dashboard')">
+        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg>
+        <span>Dashboard</span>
+      </button>
+
+      <button 
+        class="nav-item" 
+        [class.active]="activeSection === 'menu' || activeSection === 'promociones' || activeSection === 'carta' || activeSection === 'acompanamientos' || activeSection === 'bebidas'"
+        (click)="toggleMenu()">
+        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <span>Menú</span>
+        <svg class="expand-icon" [class.rotated]="menuExpanded" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      <!-- Submenú de Menú -->
+      <div class="submenu" [class.expanded]="menuExpanded">
+        <button 
+          class="submenu-item"
+          [class.active]="activeSection === 'promociones'"
+          (click)="setActiveSection('promociones')">
+          <span>Promociones</span>
+        </button>
+        <button 
+          class="submenu-item"
+          [class.active]="activeSection === 'carta'"
+          (click)="setActiveSection('carta')">
+          <span>Carta</span>
+        </button>
+        <button 
+          class="submenu-item"
+          [class.active]="activeSection === 'acompanamientos'"
+          (click)="setActiveSection('acompanamientos')">
+          <span>Acompañamientos</span>
+        </button>
+        <button 
+          class="submenu-item"
+          [class.active]="activeSection === 'bebidas'"
+          (click)="setActiveSection('bebidas')">
+          <span>Bebidas</span>
+        </button>
+      </div>
+
+      <button 
+        class="nav-item" 
+        [class.active]="activeSection === 'pedidos'"
+        (click)="setActiveSection('pedidos')">
+        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+        </svg>
+        <span>Mis Pedidos</span>
+      </button>
+
+      <button 
+        class="nav-item" 
+        [class.active]="activeSection === 'locales'"
+        (click)="setActiveSection('locales')">
+        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <span>Locales</span>
+      </button>
+
+      <button 
+        class="nav-item" 
+        [class.active]="activeSection === 'usuarios'"
+        (click)="setActiveSection('usuarios')">
+        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <span>Usuarios</span>
+      </button>
+    </nav>
+
+    <!-- Botón Cerrar Sesión -->
+    <div class="sidebar-footer">
+      <button class="logout-btn" (click)="logout()">
+        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg>
+        <span>Cerrar Sesión</span>
+      </button>
+      <p class="version">v1.0</p>
+    </div>
+  </aside>
+
+  <!-- Contenido Principal -->
+  <main class="main-content">
+    <!-- Dashboard -->
+    <div *ngIf="activeSection === 'dashboard'" class="content-section">
+      <div class="dashboard-header">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXayfXZsp1nF9zkFfgDsUmdY8DZFktLTx_Bw&s" alt="El Pollo Empoderado" class="dashboard-logo">
+        <h1>Bienvenido al Panel de Administración</h1>
+        <p>El Pollo Empoderado</p>
+      </div>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>Total Pedidos</h3>
+          <p class="stat-number">156</p>
+        </div>
+        <div class="stat-card">
+          <h3>Items en Menú</h3>
+          <p class="stat-number">24</p>
+        </div>
+        <div class="stat-card">
+          <h3>Locales</h3>
+          <p class="stat-number">3</p>
+        </div>
+        <div class="stat-card">
+          <h3>Usuarios</h3>
+          <p class="stat-number">8</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menú General -->
+    <div *ngIf="activeSection === 'menu'" class="content-section">
+      <h1>Gestión de Menú</h1>
+      <p>Selecciona una categoría del menú lateral para gestionar los items.</p>
+    </div>
+
+    <!-- Promociones -->
+    <div *ngIf="activeSection === 'promociones'" class="content-section">
+      <h1>Gestión de Promociones</h1>
+      <p>Contenido de gestión de promociones...</p>
+    </div>
+
+    <!-- Carta -->
+    <div *ngIf="activeSection === 'carta'" class="content-section">
+      <h1>Gestión de Carta</h1>
+      <p>Contenido de gestión de carta...</p>
+    </div>
+
+    <!-- Acompañamientos -->
+    <div *ngIf="activeSection === 'acompanamientos'" class="content-section">
+      <h1>Gestión de Acompañamientos</h1>
+      <p>Contenido de gestión de acompañamientos...</p>
+    </div>
+
+    <!-- Bebidas -->
+    <div *ngIf="activeSection === 'bebidas'" class="content-section">
+      <h1>Gestión de Bebidas</h1>
+      <p>Contenido de gestión de bebidas...</p>
+    </div>
+
+    <!-- Mis Pedidos -->
+    <div *ngIf="activeSection === 'pedidos'" class="content-section">
+      <h1>Mis Pedidos</h1>
+      <!-- Aquí va el contenido de pedidos -->
+      <p>Contenido de pedidos...</p>
+    </div>
+
+    <!-- Locales -->
+    <div *ngIf="activeSection === 'locales'" class="content-section">
+      <h1>Gestión de Locales</h1>
+      <!-- Aquí va el contenido de locales -->
+      <p>Contenido de locales...</p>
+    </div>
+
+    <!-- Usuarios -->
+    <div *ngIf="activeSection === 'usuarios'" class="content-section">
+      <h1>Gestión de Usuarios</h1>
+      <!-- Aquí va el contenido de usuarios -->
+      <p>Contenido de usuarios...</p>
+    </div>
+  </main>
+</div>

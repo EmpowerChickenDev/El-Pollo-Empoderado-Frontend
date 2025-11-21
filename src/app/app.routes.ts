@@ -10,9 +10,11 @@ import { AcompComponent } from './features/acompanamientos/acompanamientos';
 import { BebidasComponent } from './features/bebidas/bebidas';
 import { LocalesComponent } from './features/locales/locales.component';
 
+import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout';
+
 export const routes: Routes = [
     { path: '', component: HomeComponent },
-    
+
     // Ruta de Menú con subrutas
     {
         path: 'menu',
@@ -25,8 +27,11 @@ export const routes: Routes = [
             { path: 'bebidas', component: BebidasComponent }
         ]
     },
-    
-    { path: 'locales', component: LocalesComponent }, 
+
+    // Ruta admin SIN navbar ni footer
+    { path: 'admin', component: AdminLayoutComponent },
+
+    { path: 'locales', component: LocalesComponent },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
 
