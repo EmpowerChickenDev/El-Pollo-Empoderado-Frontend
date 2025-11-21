@@ -26,6 +26,18 @@ if (fs.existsSync(envFile)) {
     ENABLE_DEBUG: process.env.ENABLE_DEBUG,
     TOKEN_KEY: process.env.TOKEN_KEY,
   };
+
+  // Verificar que las variables críticas estén definidas
+  const requiredVars = ['API_URL'];
+  const missingVars = requiredVars.filter(varName => !envConfig[varName]);
+  
+  if (missingVars.length > 0) {
+    console.error(`\n❌ ERROR: Las siguientes variables de entorno son requeridas pero no están definidas:`);
+    console.error(`   ${missingVars.join(', ')}`);
+    console.error(`\n📝 Por favor, configura estas variables en tu plataforma de deployment (Vercel, etc.)`);
+    console.error(`   Puedes usar los valores de .env.example como referencia.\n`);
+    process.exit(1);
+  }
 }
 
 // Crear el contenido de environment.ts
