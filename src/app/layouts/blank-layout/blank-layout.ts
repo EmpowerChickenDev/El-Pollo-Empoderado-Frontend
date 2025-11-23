@@ -4,10 +4,10 @@ import { Navbar } from '../../shared/navbar/navbar';
 import { Footer } from '../../shared/footer/footer';
 
 @Component({
-  selector: 'app-public-layout',
+  selector: 'app-blank-layout',
   standalone: true,
   imports: [RouterOutlet, Navbar, Footer],
-  templateUrl: './public-layout.html',
-  styleUrls: ['./public-layout.css']
+  templateUrl: './blank-layout.html',
+  styleUrls: ['./blank-layout.css']
 })
-export class PublicLayoutComponent {}
+export class BlankLayoutComponent {}

@@ -1,0 +1,50 @@
+.carrito-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  padding: 40px 20px;
+}
+
+.development-message {
+  text-align: center;
+  max-width: 500px;
+  padding: 40px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.icon {
+  margin-bottom: 20px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.development-message h1 {
+  color: #5D4037;
+  font-size: 2rem;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.message {
+  color: #D32F2F;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.sub-message {
+  color: #666;
+  font-size: 1rem;
+  line-height: 1.6;
+}
