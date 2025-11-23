@@ -12,9 +12,10 @@ import { LocalesComponent } from './features/locales/locales.component';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout';
 import { PublicLayoutComponent } from './layouts/public-layout/public-layout';
+import { BlankLayoutComponent } from './layouts/blank-layout/blank-layout';
 
 export const routes: Routes = [
-    // Rutas públicas (con navbar y footer)
+    // Rutas públicas con navbar + navbarMenu + footer
     {
         path: '',
         component: PublicLayoutComponent,
@@ -34,7 +35,15 @@ export const routes: Routes = [
                 ]
             },
             
-            { path: 'locales', component: LocalesComponent },
+            { path: 'locales', component: LocalesComponent }
+        ]
+    },
+
+    // Rutas de autenticación (solo navbar + footer, SIN navbarMenu)
+    {
+        path: '',
+        component: BlankLayoutComponent,
+        children: [
             { path: 'login', component: LoginComponent },
             { path: 'register', component: RegisterComponent }
         ]
@@ -43,15 +52,7 @@ export const routes: Routes = [
     // Rutas administrativas (SIN navbar ni footer)
     {
         path: 'admin',
-        component: AdminLayoutComponent,
-        children: [
-            { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-            { path: 'dashboard', component: AdminLayoutComponent },
-            // Aquí puedes agregar más rutas de admin cuando las crees
-            // { path: 'users', component: UsersManagementComponent },
-            // { path: 'orders', component: OrdersManagementComponent },
-            // etc.
-        ]
+        component: AdminLayoutComponent
     },
 
     { path: '**', redirectTo: '' }
