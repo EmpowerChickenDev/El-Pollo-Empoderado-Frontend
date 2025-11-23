@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Product } from '../../../core/models/product.model';
+import { resolveImageUrl } from '../../../core/utils/image.util';
 
 @Component({
   selector: 'app-product-card',
@@ -10,9 +11,12 @@ import { Product } from '../../../core/models/product.model';
     <div class="product-card">
       <div class="product-card__image-container">
         <img 
-          [src]="product.imagen" 
+          [src]="imgSrc"
           [alt]="product.nombre"
           class="product-card__image"
+          loading="lazy"
+          decoding="async"
+          (error)="onImgError($event)"
         />
         <div *ngIf="product.precioAnterior" class="product-card__badge">
           ¡OFERTA!
@@ -234,6 +238,15 @@ import { Product } from '../../../core/models/product.model';
 })
 export class ProductCardComponent {
   @Input() product!: Product;
+
+  get imgSrc(): string {
+    // Prioriza `imageUrl` (backend camelCase), luego `imagen` (mocks/legacy)
+    return resolveImageUrl(this.product?.imageUrl || this.product?.imagen);
+  }
+
+  onImgError(event: Event) {
+    (event.target as HTMLImageElement).src = '/assets/img/no-image.svg';
+  }
 
   agregarProducto() {
     console.log('Producto agregado:', this.product);
