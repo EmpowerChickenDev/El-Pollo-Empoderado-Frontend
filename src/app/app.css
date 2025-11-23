@@ -1,0 +1,27 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Roboto Condensed", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #fafafa;
+}
+
+.layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content {
+    margin-top: 78px; /* Espacio para navbar principal */
+    flex: 1;
+    padding: 20px;
+}
+
+/* Cuando estamos en rutas de /menu/*, agregar más margen por el navbarMenu */
+body:has([routerlinkactive="active"]) .main-content {
+    margin-top: 148px; /* 78px navbar + 70px navbarMenu */
+}
