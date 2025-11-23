@@ -13,16 +13,8 @@ app-navbar {
     z-index: 1000;
 }
 
-app-navbar-menu {
-    position: fixed;
-    top: 78px;
-    left: 0;
-    right: 0;
-    z-index: 999;
-}
-
 .main-content {
     flex: 1;
-    margin-top: 140px;
+    margin-top: 78px;
     padding: 20px;
 }
