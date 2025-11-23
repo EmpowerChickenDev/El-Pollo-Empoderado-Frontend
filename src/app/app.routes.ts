@@ -9,6 +9,7 @@ import { CartaComponent } from './features/carta/carta';
 import { AcompComponent } from './features/acompanamientos/acompanamientos';
 import { BebidasComponent } from './features/bebidas/bebidas';
 import { LocalesComponent } from './features/locales/locales.component';
+import { PedidosComponent } from './features/pedidos/pedidos.component';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout';
 import { PublicLayoutComponent } from './layouts/public-layout/public-layout';
@@ -35,7 +36,8 @@ export const routes: Routes = [
                 ]
             },
             
-            { path: 'locales', component: LocalesComponent }
+            { path: 'locales', component: LocalesComponent },
+            { path: 'pedidos', component: PedidosComponent }
         ]
     },
 
