@@ -1,12 +1,53 @@
 export interface Product {
   id: number;
+  // Campos en español (usados actualmente en la UI)
   nombre: string;
   descripcion: string;
   precio: number;
   precioAnterior?: number;
-  imagen: string;
+  imagen?: string; // legacy: puede venir como `imagen` desde mocks/legacy
+
+  // Campos alineados con el backend y con convenciones camelCase
+  imageUrl?: string; // mapeo recomendado desde `image_url` del backend
+
   categoria: 'promocion' | 'carta' | 'acompanamiento' | 'bebida';
   disponible: boolean;
+}
+
+// Helper para mapear un DTO de backend (snake_case) a la interfaz `Product` usada en la UI.
+export function mapDtoToProduct(dto: unknown): Product {
+  const d = (dto as Record<string, unknown>) || {};
+  const id = Number(d['id'] ?? 0);
+  const nombre = String(d['name'] ?? d['nombre'] ?? '');
+  const descripcion = String(d['description'] ?? d['descripcion'] ?? '');
+  const precio = Number(d['price'] ?? d['precio'] ?? 0);
+  const imagen = (d['imagen'] ?? d['image_url'] ?? d['imageUrl']) as string | undefined;
+  const imageUrl = (d['image_url'] ?? d['imageUrl'] ?? d['imagen']) as string | undefined;
+  const categoriaRaw = d['category'] ?? d['categoria'] ?? d['categoria_name'] ?? 'carta';
+  let categoria = 'carta' as 'promocion' | 'carta' | 'acompanamiento' | 'bebida';
+  if (categoriaRaw && typeof categoriaRaw === 'object') {
+    const cr = categoriaRaw as Record<string, unknown>;
+    categoria = String(cr['name'] ?? 'carta') as 'promocion' | 'carta' | 'acompanamiento' | 'bebida';
+  } else {
+    categoria = String(categoriaRaw) as 'promocion' | 'carta' | 'acompanamiento' | 'bebida';
+  }
+  const disponible = Boolean(d['available'] ?? d['disponible'] ?? true);
+  const precioAnteriorRaw = d['original_price'] ?? d['precio_anterior'] ?? d['precioAnterior'];
+  const precioAnterior = typeof precioAnteriorRaw === 'number'
+    ? precioAnteriorRaw
+    : (typeof precioAnteriorRaw === 'string' ? Number(precioAnteriorRaw) : undefined);
+
+  return {
+    id,
+    nombre,
+    descripcion,
+    precio,
+    precioAnterior,
+    imagen,
+    imageUrl,
+    categoria,
+    disponible,
+  };
 }
 
 export const PRODUCTOS_MOCK: Product[] = [
