@@ -5,6 +5,7 @@ export interface Dish {
   name: string;
   description: string;
   price: number;
+  originalPrice?: number; // Precio anterior para mostrar descuentos
   imageUrl?: string;
   category?: Category;
   categoryId?: number;

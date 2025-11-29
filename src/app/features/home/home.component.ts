@@ -455,57 +455,37 @@ export class HomeComponent implements OnInit {
   private dishService = inject(DishService);
 
   ngOnInit() {
-    // Intentamos cargar desde backend el menú (GET /menu). Si falla, usamos mocks.
-    const url = `${environment.apiUrl.replace(/\/$/, '')}${environment.apiPrefix}/menu`;
+    // Intentamos cargar las promociones desde backend usando el servicio
+    const url = `${environment.apiUrl.replace(/\/$/, '')}${environment.apiPrefix}/dishes/category/{categoryId}`;
     this.lastRequestInfo = { method: 'GET', url };
-    this.dataSourceMessage = `Haciendo petición: GET ${url}`;
-
-    this.dishService.getFullMenu().subscribe({
-      next: (menu: unknown) => {
-        this.dataSourceMessage = `Datos cargados desde BACKEND: GET ${url}`;
-        // Si el backend no tiene el campo categories o está vacío, fallback a mocks
-        try {
-          const m = (menu as Record<string, unknown>) || {};
-          const categoriesRaw = (m['categories'] as unknown) || [];
-          const categoriesArr = Array.isArray(categoriesRaw) ? (categoriesRaw as unknown[]) : [];
-          // Tomar primeros 4 promociones si existen
-          const promociones: Product[] = [];
-          categoriesArr.forEach((catRaw) => {
-            const cat = (catRaw as Record<string, unknown>) || {};
-            const catInfo = (cat['category'] as Record<string, unknown> | undefined) ?? undefined;
-            const dishesRaw = (cat['dishes'] as unknown) || [];
-            const dishesArr = Array.isArray(dishesRaw) ? (dishesRaw as unknown[]) : [];
-            dishesArr.forEach((dRaw) => {
-              const d = (dRaw as Record<string, unknown>) || {};
-              const catName = catInfo ? String(catInfo['name'] ?? '').toLowerCase() : '';
-              if (promociones.length < 4 && (catName === 'promociones' || catName === 'promocion')) {
-                promociones.push({
-                  id: Number(d['id'] ?? 0),
-                  nombre: String(d['name'] ?? d['nombre'] ?? ''),
-                  descripcion: String(d['description'] ?? d['descripcion'] ?? ''),
-                  precio: Number(d['price'] ?? d['precio'] ?? 0),
-                  imagen: String(d['imageUrl'] ?? d['image_url'] ?? d['imagen'] ?? ''),
-                  categoria: 'promocion',
-                  disponible: true
-                } as Product);
-              }
-            });
-          });
-          if (promociones.length) {
-            this.promocionesDestacadas = promociones;
-            return;
-          }
-        } catch {
-          // fallthrough a mocks
+    this.dataSourceMessage = 'Cargando promociones desde backend...';
+    
+    // El servicio maneja toda la lógica de obtener la categoría y los platos
+    this.dishService.getPromotionDishes(4).subscribe({
+      next: (dishes) => {
+        if (dishes.length > 0) {
+          this.dataSourceMessage = `Datos cargados desde BACKEND: ${dishes.length} promociones encontradas`;
+          
+          // Mapear los platos a productos para el template
+          this.promocionesDestacadas = dishes.map(dish => ({
+            id: dish.id,
+            nombre: dish.name,
+            descripcion: dish.description,
+            precio: dish.price,
+            precioAnterior: dish.originalPrice,
+            imagen: dish.imageUrl,
+            categoria: 'promocion',
+            disponible: true
+          } as Product));
+        } else {
+          // Si no hay promociones, usar mocks
+          this.dataSourceMessage = 'No se encontraron promociones en el backend. Usando MOCKS.';
+          this.useMocks();
         }
-
-        // Si llegamos aquí, usamos mocks
-        this.dataSourceMessage = `Backend respondió, pero no se encontraron promociones válidas. Usando MOCKS.`;
-        this.useMocks();
       },
-      error: (err: unknown) => {
-        const errMsg = (err && typeof err === 'object') ? String((err as Record<string, unknown>)['message'] ?? String(err)) : String(err);
-        this.dataSourceMessage = `ERROR al consultar backend (${url}). Usando MOCKS. Detalle: ${errMsg}`;
+      error: (err) => {
+        console.error('[HomeComponent] Error al cargar promociones:', err);
+        this.dataSourceMessage = `ERROR al cargar promociones (${err.status || 'desconocido'}). Usando MOCKS.`;
         this.useMocks();
       }
     });
