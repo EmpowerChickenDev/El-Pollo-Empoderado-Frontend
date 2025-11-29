@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Product, PRODUCTOS_MOCK } from '../../core/models/product.model';
 import { DishService } from '../../core/services/dish.service';
-import { environment } from '../../../environments/environment';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card';
 
 @Component({
@@ -13,11 +12,6 @@ import { ProductCardComponent } from '../../shared/components/product-card/produ
   template: `
     <!-- Hero Section -->
     <section class="hero">
-      <!-- Banner de estado de datos (mocks / backend) -->
-      <div *ngIf="dataSourceMessage" class="data-source-banner">
-        {{ dataSourceMessage }}
-      </div>
-
       <div class="hero__content">
         <div class="hero__text">
           <h1 class="hero__title">
@@ -420,17 +414,6 @@ import { ProductCardComponent } from '../../shared/components/product-card/produ
       .features {
         padding: 60px 20px;
       }
-
-      .data-source-banner {
-        background: #fff3e0;
-        color: #bf360c;
-        padding: 10px 16px;
-        border-radius: 6px;
-        margin: 12px auto;
-        max-width: 1100px;
-        font-weight: 700;
-        text-align: center;
-      }
     }
 
     @media (max-width: 480px) {
@@ -448,23 +431,17 @@ import { ProductCardComponent } from '../../shared/components/product-card/produ
 })
 export class HomeComponent implements OnInit {
   promocionesDestacadas: Product[] = [];
-  // estado para mostrar en UI de dónde vienen los datos
-  dataSourceMessage: string | null = null;
-  lastRequestInfo: { method: string; url: string } | null = null;
 
   private dishService = inject(DishService);
 
   ngOnInit() {
-    // Intentamos cargar las promociones desde backend usando el servicio
-    const url = `${environment.apiUrl.replace(/\/$/, '')}${environment.apiPrefix}/dishes/category/{categoryId}`;
-    this.lastRequestInfo = { method: 'GET', url };
-    this.dataSourceMessage = 'Cargando promociones desde backend...';
+    console.log('[HomeComponent] Cargando promociones desde backend...');
     
     // El servicio maneja toda la lógica de obtener la categoría y los platos
     this.dishService.getPromotionDishes(4).subscribe({
       next: (dishes) => {
         if (dishes.length > 0) {
-          this.dataSourceMessage = `Datos cargados desde BACKEND: ${dishes.length} promociones encontradas`;
+          console.log(`[HomeComponent] Datos cargados desde BACKEND: ${dishes.length} promociones encontradas`);
           
           // Mapear los platos a productos para el template
           this.promocionesDestacadas = dishes.map(dish => ({
@@ -479,22 +456,21 @@ export class HomeComponent implements OnInit {
           } as Product));
         } else {
           // Si no hay promociones, usar mocks
-          this.dataSourceMessage = 'No se encontraron promociones en el backend. Usando MOCKS.';
+          console.warn('[HomeComponent] No se encontraron promociones en el backend. Usando MOCKS.');
           this.useMocks();
         }
       },
       error: (err) => {
         console.error('[HomeComponent] Error al cargar promociones:', err);
-        this.dataSourceMessage = `ERROR al cargar promociones (${err.status || 'desconocido'}). Usando MOCKS.`;
         this.useMocks();
       }
     });
   }
 
   private useMocks() {
+    console.log('[HomeComponent] Usando datos MOCK locales.');
     this.promocionesDestacadas = PRODUCTOS_MOCK
       .filter(p => p.categoria === 'promocion')
       .slice(0, 4);
-    if (!this.dataSourceMessage) this.dataSourceMessage = 'Usando datos MOCK locales.';
   }
 }
