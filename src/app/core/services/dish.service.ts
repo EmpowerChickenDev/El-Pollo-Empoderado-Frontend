@@ -1,11 +1,11 @@
-// src/app/services/dish.service.ts
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, switchMap, of, catchError } from 'rxjs';
 import { Dish, MenuResponse } from '../models/dish.model';
 import { map, tap } from 'rxjs/operators';
 import { resolveImageUrl } from '../utils/image.util';
 import { environment } from '../../../environments/environment';
+import { CategoryService } from './category.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,7 @@ export class DishService {
   private apiUrl = `${environment.apiUrl}${environment.apiPrefix}/dishes`;
   private menuUrl = `${environment.apiUrl}${environment.apiPrefix}/menu`;
   private http = inject(HttpClient);
+  private categoryService = inject(CategoryService);
 
   /**
    * Obtiene los headers con el token de autenticación
@@ -62,6 +63,109 @@ export class DishService {
       tap(list => { if (environment.enableDebug) console.log(`[DishService] response from ${url}:`, { count: Array.isArray(list)? list.length : 'unknown' }); }),
       map(list => (list || []).map(dto => this.mapDtoToDish(dto)))
     );
+  }
+
+  /**
+   * Obtiene los primeros N platos de la categoría "Promociones"
+   * Este método encapsula la lógica de buscar la categoría y obtener sus platos
+   * GET /api/categories -> busca "Promociones" -> GET /api/dishes/category/{id}
+   */
+  getPromotionDishes(limit = 4): Observable<Dish[]> {
+    if (environment.enableDebug) console.log(`[DishService] getPromotionDishes(limit: ${limit})`);
+    
+    return this.categoryService.getAllCategories().pipe(
+      switchMap(categories => {
+        // Buscar la categoría "Promociones" (case insensitive)
+        const promocionesCategory = categories.find(cat => 
+          cat.name.toLowerCase().includes('promocion')
+        );
+        
+        if (!promocionesCategory) {
+          if (environment.enableDebug) console.warn('[DishService] No se encontró la categoría "Promociones"');
+          return of([]);
+        }
+        
+        // Asegurarse de que el id sea un número válido antes de usarlo
+        const rawId = promocionesCategory.id;
+        const categoryId = Number(rawId ?? NaN);
+        if (isNaN(categoryId)) {
+          if (environment.enableDebug) console.warn('[DishService] La categoría "Promociones" tiene un id inválido:', rawId);
+          return of([]);
+        }
+        if (environment.enableDebug) console.log(`[DishService] Categoría "Promociones" encontrada con ID: ${categoryId}`);
+        
+        // Obtener los platos de esa categoría
+        return this.getDishesByCategory(categoryId).pipe(
+          map(dishes => dishes.slice(0, limit))
+        );
+      }),
+      catchError(err => {
+        console.error('[DishService] Error al obtener platos de promociones:', err);
+        return of([]);
+      })
+    );
+  }
+
+  /**
+   * Obtiene platos por nombre de categoría (busca la categoría y luego sus platos)
+   * Este es un método genérico para cualquier categoría
+   * GET /api/categories -> busca categoría -> GET /api/dishes/category/{id}
+   * 
+   * @param categoryName Nombre de la categoría a buscar (case insensitive, búsqueda parcial)
+   * @param limit Número máximo de platos a devolver (opcional)
+   */
+  getDishesByCategoryName(categoryName: string, limit?: number): Observable<Dish[]> {
+    if (environment.enableDebug) console.log(`[DishService] getDishesByCategoryName("${categoryName}", limit: ${limit})`);
+    
+    return this.categoryService.getAllCategories().pipe(
+      switchMap(categories => {
+        // Normalizar el nombre de búsqueda (quitar tildes y plurales opcionales)
+        const normalizedSearch = this.normalizeCategoryName(categoryName);
+        
+        // Buscar la categoría por nombre (case insensitive y normalizado)
+        const category = categories.find(cat => {
+          const normalizedCatName = this.normalizeCategoryName(cat.name);
+          return normalizedCatName.includes(normalizedSearch) || normalizedSearch.includes(normalizedCatName);
+        });
+        
+        if (!category) {
+          if (environment.enableDebug) console.warn(`[DishService] No se encontró la categoría "${categoryName}"`);
+          return of([]);
+        }
+        
+        // Asegurarse de que el id sea un número válido
+        const rawId = category.id;
+        const categoryId = Number(rawId ?? NaN);
+        if (isNaN(categoryId)) {
+          if (environment.enableDebug) console.warn(`[DishService] La categoría "${categoryName}" tiene un id inválido:`, rawId);
+          return of([]);
+        }
+        if (environment.enableDebug) console.log(`[DishService] Categoría "${category.name}" encontrada con ID: ${categoryId} (buscando "${categoryName}")`);
+        
+        // Obtener los platos de esa categoría
+        return this.getDishesByCategory(categoryId).pipe(
+          map(dishes => limit ? dishes.slice(0, limit) : dishes)
+        );
+      }),
+      catchError(err => {
+        console.error(`[DishService] Error al obtener platos de la categoría "${categoryName}":`, err);
+        return of([]);
+      })
+    );
+  }
+
+  /**
+   * Normaliza el nombre de una categoría para búsqueda flexible
+   * - Convierte a minúsculas
+   * - Quita tildes
+   * - Elimina la 's' final si existe (para manejar singular/plural)
+   */
+  private normalizeCategoryName(name: string): string {
+    return name
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Quita tildes
+      .replace(/s$/, ''); // Quita la 's' final
   }
 
   /**
@@ -160,6 +264,7 @@ export class DishService {
       name: String(d['name'] ?? d['nombre'] ?? ''),
       description: String(d['description'] ?? d['descripcion'] ?? ''),
       price: Number(d['price'] ?? d['precio'] ?? 0),
+      originalPrice: d['original_price'] || d['originalPrice'] ? Number(d['original_price'] ?? d['originalPrice']) : undefined,
       imageUrl: resolveImageUrl(String(d['image_url'] ?? d['imageUrl'] ?? d['imagen'] ?? '')),
       categoryId: Number(d['category_id'] ?? d['categoryId'] ?? (categoryObj ? Number(categoryObj['id'] ?? 0) : undefined)),
       category: categoryObj ? { id: Number(categoryObj['id'] ?? undefined), name: String(categoryObj['name'] ?? ''), description: String(categoryObj['description'] ?? '') } : undefined,

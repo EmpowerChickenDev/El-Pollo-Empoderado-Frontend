@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Product, PRODUCTOS_MOCK } from '../../core/models/product.model';
+import { Product } from '../../core/models/product.model';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card';
+import { DishService } from '../../core/services/dish.service';
+import { Dish } from '../../core/models/dish.model';
 
 @Component({
   selector: 'app-carta',
@@ -80,12 +82,39 @@ import { ProductCardComponent } from '../../shared/components/product-card/produ
 })
 export class CartaComponent implements OnInit {
   productosMenu: Product[] = [];
+  private dishService = inject(DishService);
+  isLoading = false;
 
   ngOnInit() {
     this.cargarMenu();
   }
 
   cargarMenu() {
-    this.productosMenu = PRODUCTOS_MOCK.filter(p => p.categoria === 'carta');
+    this.isLoading = true;
+    this.dishService.getDishesByCategoryName('carta').subscribe({
+      next: (dishes) => {
+        this.productosMenu = dishes.map(dish => this.dishToProduct(dish));
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error al cargar carta:', err);
+        this.isLoading = false;
+        this.productosMenu = [];
+      }
+    });
+  }
+
+  private dishToProduct(dish: Dish): Product {
+    return {
+      id: dish.id || 0,
+      nombre: dish.name,
+      descripcion: dish.description,
+      precio: dish.price,
+      precioAnterior: dish.originalPrice,
+      imagen: dish.imageUrl,
+      imageUrl: dish.imageUrl,
+      categoria: 'carta',
+      disponible: true
+    };
   }
 }

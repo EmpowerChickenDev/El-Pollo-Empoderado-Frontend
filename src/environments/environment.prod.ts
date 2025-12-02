@@ -3,7 +3,7 @@
 
 export const environment = {
   production: true,
-  apiUrl: 'https://el-pollo-empoderado-backend-production.up.railway.app/',
+  apiUrl: 'https://el-pollo-empoderado-backend-production.up.railway.app',
   apiPrefix: '/api',
   apiVersion: '',
   appName: 'El Pollo Empoderado',
