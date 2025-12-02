@@ -1,5 +1,6 @@
 // Este archivo es generado automáticamente
 // NO EDITAR MANUALMENTE
+// Ambiente: LOCAL
 
 export const environment = {
   production: false,
