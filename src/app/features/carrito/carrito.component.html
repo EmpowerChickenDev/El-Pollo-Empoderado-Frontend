@@ -1,14 +1,87 @@
-<div class="carrito-container">
-  <div class="development-message">
-    <div class="icon">
-      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#D32F2F" stroke-width="2">
-        <circle cx="9" cy="21" r="1"></circle>
-        <circle cx="20" cy="21" r="1"></circle>
-        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-      </svg>
+<div class="container">
+  <div class="stepper">
+    <div class="step active">
+      <div class="step-circle">1</div>
+      <span>Mi pedido</span>
     </div>
-    <h1>Mi Carrito</h1>
-    <p class="message">Esta sección está actualmente en desarrollo.</p>
-    <p class="sub-message">Pronto podrás agregar productos a tu carrito y realizar tus pedidos desde aquí.</p>
+    <div class="step">
+      <div class="step-circle">2</div>
+      <span>Envío</span>
+    </div>
+    <div class="step">
+      <div class="step-circle">3</div>
+      <span>Pago</span>
+    </div>
+  </div>
+
+  <h1>Mi carrito</h1>
+
+  <div class="alert-box">
+    <i class="fas fa-info-circle"></i>
+    <span>Recuerda que tienes 30 minutos para recoger tu pedido. ¡Corre antes de que cierre la tienda! <i
+        class="fas fa-motorcycle"></i></span>
+  </div>
+
+  <div class="cart-layout">
+    <div class="cart-items">
+      <div class="table-header">
+        <div>Producto</div>
+        <div style="text-align: center;">Precio</div>
+        <div style="text-align: center;">Subtotal</div>
+        <div></div>
+      </div>
+
+      <div class="cart-row">
+        <div class="product-info">
+          <img
+            src="https://www.donbelisario.com.pe/media/catalog/product/p/d/pdp_brasa-days_duo_1000x1000px_1.png?optimize=medium&bg-color=255,255,255&fit=bounds&height=400&width=400&canvas=400:400&format=jpeg&dpr=2 2x,https://www.donbelisario.com.pe/media/catalog/product/p/d/pdp_brasa-days_duo_1000x1000px_1.png?optimize=medium&bg-color=255,255,255&fit=bounds&height=400&width=400&canvas=400:400&format=jpeg&dpr=3 3x"
+            alt="Brasa Personal" class="product-img">
+          <span class="product-name">Brasa Personal</span>
+        </div>
+        <div class="price-text" style="text-align: center;">S/15.90</div>
+
+        <div class="qty-control" style="justify-content: center;">
+          <button class="qty-btn"><i class="fas fa-minus"></i></button>
+          <span class="qty-val">1</span>
+          <button class="qty-btn"><i class="fas fa-plus"></i></button>
+        </div>
+
+        <div class="price-text" style="text-align: center;">S/15.90</div>
+
+        <div class="actions">
+          <i class="far fa-edit"></i>
+          <i class="far fa-trash-alt"></i>
+        </div>
+      </div>
+
+      <a href="#" class="back-link">
+        <i class="fas fa-arrow-left"></i> Seguir comprando
+      </a>
+    </div>
+
+    <div class="cart-summary">
+      <div class="summary-card">
+        <div class="discount-toggle">
+          <span><i class="fas fa-gift"></i> ¿Tienes un código de descuento?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>S/15.90</span>
+        </div>
+        <div class="summary-row">
+          <span>Costo de envío</span>
+          <span>--</span>
+        </div>
+
+        <div class="total-row">
+          <span>Total Pedido</span>
+          <span>S/15.90</span>
+        </div>
+
+        <button class="btn-checkout" (click)="navegarAEnvio()">Finalizar compra</button>
+      </div>
+    </div>
   </div>
 </div>

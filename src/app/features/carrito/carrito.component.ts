@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-carrito',
@@ -8,4 +9,9 @@ import { CommonModule } from '@angular/common';
   templateUrl: './carrito.component.html',
   styleUrls: ['./carrito.component.css']
 })
-export class CarritoComponent {}
+export class CarritoComponent {
+  private router = inject(Router);
+  navegarAEnvio() {
+    this.router.navigate(['/envio']);
+  }
+}

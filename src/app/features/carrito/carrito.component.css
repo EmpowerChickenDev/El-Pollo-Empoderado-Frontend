@@ -1,50 +1,293 @@
-.carrito-container {
+:root {
+  --primary-red: #e5133a;
+  /* Color rojo de la marca */
+  --text-dark: #222;
+  --text-grey: #666;
+  --bg-light: #f9f9f9;
+  --border-color: #eee;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #fff;
+  padding: 20px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* --- STEPPER (1. Mi pedido...) --- */
+.stepper {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 40px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ccc;
+  /* Pasos inactivos */
+}
+
+.step.active {
+  color: #000;
+}
+
+.step-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 60vh;
-  padding: 40px 20px;
+  font-size: 12px;
 }
 
-.development-message {
-  text-align: center;
-  max-width: 500px;
-  padding: 40px;
-  background: #fff;
+.step.active .step-circle {
+  background-color: #e5133a;
+}
+
+/* --- TÍTULO --- */
+h1 {
+  font-size: 28px;
+  margin-bottom: 25px;
+  color: #222;
+}
+
+/* --- ALERTA ROJA --- */
+.alert-box {
+  background-color: #e5133a;
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  margin-bottom: 30px;
+}
+
+.alert-box i {
+  font-size: 18px;
+}
+
+/* --- LAYOUT PRINCIPAL (GRID) --- */
+.cart-layout {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.cart-items {
+  flex: 1;
+  /* Ocupa el espacio restante */
+  min-width: 600px;
+}
+
+.cart-summary {
+  width: 380px;
+  /* Ancho fijo para el resumen */
+}
+
+/* --- TABLA DE PRODUCTOS --- */
+.table-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 100px;
+  /* Producto, Precio, Subtotal, Acciones */
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+  font-weight: 600;
+  font-size: 14px;
+  color: #222;
+}
+
+.cart-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 100px;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.product-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.product-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  background-color: #eee;
+}
+
+.product-name {
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.price-text {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+/* Control de cantidad (+ -) */
+.qty-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qty-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 14px;
+}
+
+.qty-val {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.actions {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  color: #666;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* --- CARD RESUMEN (DERECHA) --- */
+.summary-card {
+  background: white;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 25px;
 }
 
-.icon {
+.discount-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
+  cursor: pointer;
   margin-bottom: 20px;
-  animation: float 3s ease-in-out infinite;
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: #222;
 }
 
-.development-message h1 {
-  color: #5D4037;
-  font-size: 2rem;
-  margin-bottom: 16px;
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+  font-size: 20px;
   font-weight: 700;
 }
 
-.message {
-  color: #D32F2F;
-  font-size: 1.2rem;
+.btn-checkout {
+  width: 100%;
+  background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%);
+  /* Ajuste visual al tono de la imagen */
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 25px;
+  font-size: 16px;
   font-weight: 600;
-  margin-bottom: 12px;
+  margin-top: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.sub-message {
-  color: #666;
-  font-size: 1rem;
-  line-height: 1.6;
+.btn-checkout:hover {
+  box-shadow: 0 6px 20px rgba(255, 167, 38, 0.5);
+  background: linear-gradient(135deg, #FFA726 0%, #F57C00 100%);
+  transform: scale(1.05);
+}
+
+/* --- LINK SEGUIR COMPRANDO --- */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 30px;
+  text-decoration: none;
+  color: #222;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Responsividad para móviles */
+@media (max-width: 768px) {
+  .cart-layout {
+    flex-direction: column;
+  }
+
+  .cart-items {
+    min-width: 100%;
+  }
+
+  .summary-card {
+    width: 100%;
+  }
+
+  .table-header {
+    display: none;
+  }
+
+  /* Ocultar headers en móvil */
+  .cart-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .product-info {
+    flex-direction: column;
+  }
+
+  .qty-control {
+    justify-content: center;
+  }
+
+  .actions {
+    justify-content: center;
+  }
 }

@@ -1,0 +1,110 @@
+<div class="container">
+    <div class="stepper">
+        <div class="step completed">
+            <div class="step-circle"><i class="fas fa-check"></i></div>
+            <span>Mi pedido</span>
+        </div>
+        <div class="step active">
+            <div class="step-circle">2</div>
+            <span>Envío</span>
+        </div>
+        <div class="step">
+            <div class="step-circle">3</div>
+            <span>Pago</span>
+        </div>
+    </div>
+
+    <h1>Datos de entrega</h1>
+
+    <div class="checkout-layout">
+        <div class="form-section">
+
+            <div class="shipping-card">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ciudad">Ciudad</label>
+                            <select id="ciudad">
+                                <option>Lima</option>
+                                <option>Arequipa</option>
+                                <option>Cusco</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="distrito">Distrito</label>
+                            <select id="distrito">
+                                <option>Miraflores</option>
+                                <option>San Isidro</option>
+                                <option>Surco</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="direccion">Dirección exacta</label>
+                        <input type="text" id="direccion" placeholder="Av. Principal 123, Calle los Olivos...">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nro">Nro / Depto (Opcional)</label>
+                            <input type="text" id="nro" placeholder="Dpto 301">
+                        </div>
+                        <div class="form-group">
+                            <label for="telefono">Teléfono de contacto</label>
+                            <input type="tel" id="telefono" placeholder="999 999 999">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="referencia">Referencias de la casa <span
+                                style="font-weight: normal; color: #999;">(Ayuda al repartidor a llegar)</span></label>
+                        <textarea id="referencia"
+                            placeholder="Ej: Casa blanca con rejas negras, frente al parque, al lado de la bodega..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nombre">¿Quién recibe el pedido?</label>
+                        <input type="text" id="nombre" value="Usuario Actual" placeholder="Nombre completo">
+                    </div>
+
+                </form>
+
+                <a href="#" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Volver al carrito
+                </a>
+            </div>
+        </div>
+
+        <div class="summary-section">
+            <div class="summary-card">
+                <div class="summary-title">Resumen de la orden</div>
+
+                <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px;">
+                        <span>1x Brasa Personal</span>
+                        <span>S/15.90</span>
+                    </div>
+                </div>
+
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>S/15.90</span>
+                </div>
+                <div class="summary-row">
+                    <span>Costo de envío</span>
+                    <span>S/5.00</span>
+                </div>
+
+                <div class="total-row">
+                    <span>Total a Pagar</span>
+                    <span>S/20.90</span>
+                </div>
+
+                <button class="btn-next">
+                    Ir a Pagar <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
