@@ -1,9 +1,6 @@
 <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
-<link rel="stylesheet" href="login.css">
-
 
 <div class="login-container">
-
     <div class="login__item">
         <div class="first__section">
             <div class="welcome__container">
@@ -14,22 +11,54 @@
             <h1 class="login__title">
                 Iniciar Sesión
             </h1>
-            <form class="form">
+
+            <!-- Mensaje de error -->
+            <div *ngIf="successMessage" class="success-message">
+                {{ successMessage }}
+            </div>
+
+            <!-- Mensaje de error -->
+            <div *ngIf="errorMessage" class="error-message">
+                {{ errorMessage }}
+            </div>
+
+            <form class="form" (ngSubmit)="onSubmit($event)">
                 <div class="form__container">
                     <div class="form__item">
                         <label for="email" class="form__label">
                             Correo Electrónico
                         </label>
-                        <input class="form__input" id="email" type="email" placeholder="Ej. nombre@gmail.com" required>
+                        <input 
+                            class="form__input" 
+                            id="email" 
+                            type="email" 
+                            placeholder="Ej. nombre@gmail.com" 
+                            [(ngModel)]="email"
+                            name="email"
+                            required
+                            [disabled]="isLoading">
                     </div>
                     <div class="form__item">
                         <label for="password" class="form__label">
                             Contraseña
                         </label>
                         <div class="password">
-                            <input class="form__input form-input__password" id="password" type="password" placeholder="Aa12345" required>
-                            <button class="btn__password" type="button" id="togglePassword" aria-label="Mostrar contraseña"title="Mostrar / Ocultar contraseña">
-                                <i class='bxr  bx-eye toggle-password' id="togglePassword"></i>
+                            <input 
+                                class="form__input form-input__password" 
+                                id="password" 
+                                [type]="showPassword ? 'text' : 'password'" 
+                                placeholder="Aa12345" 
+                                [(ngModel)]="password"
+                                name="password"
+                                required
+                                [disabled]="isLoading">
+                            <button 
+                                class="btn__password" 
+                                type="button" 
+                                (click)="togglePasswordVisibility()" 
+                                aria-label="Mostrar contraseña"
+                                title="Mostrar / Ocultar contraseña">
+                                <i class='bxr' [ngClass]="showPassword ? 'bx-eye-off' : 'bx-eye'"></i>
                             </button>
                         </div>
                     </div>
@@ -39,7 +68,12 @@
                         </a>
                     </div>
                     <div class="form__item">
-                        <button class="btn__login">Iniciar Sesión</button>
+                        <button 
+                            class="btn__login" 
+                            type="submit"
+                            [disabled]="isLoading">
+                            {{ isLoading ? 'Cargando...' : 'Iniciar Sesión' }}
+                        </button>
                     </div>
                 </div>
             </form>
@@ -80,5 +114,3 @@
         </div>
     </div>
 </div>
-
-
