@@ -44,12 +44,24 @@
                         </span>
                     </a>
                 </li>
-                <li class="list__item">
+                <!-- Mostrar enlace de login si no está autenticado -->
+                <li class="list__item" *ngIf="!isAuthenticated">
                     <a routerLink="/login" class="list__link list-login__link">
                         <i class='bx bx-user icon__navbar'></i>
                         <span class="span-container">
                             <span class="text-login">Hola,</span>
                             <span class="text-login">Iniciar Sesión</span>
+                        </span>
+                    </a>
+                </li>
+
+                <!-- Cuando esté autenticado, mostrar nombre y enlace al perfil (sin dropdown) -->
+                <li class="list__item user-menu" *ngIf="isAuthenticated">
+                    <a routerLink="/profile" class="list__link list-login__link">
+                        <i class='bx bx-user icon__navbar'></i>
+                        <span class="span-container">
+                            <span class="text-login">Hola,</span>
+                            <span class="text-login">{{ username || 'Usuario' }}</span>
                         </span>
                     </a>
                 </li>
