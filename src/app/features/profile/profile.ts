@@ -104,13 +104,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }, this.loadingTimeoutSeconds * 1000);
 
     this.userService.getCurrentUserProfile().subscribe({
-      next: (data) => {
+      next: (data: UserDTO) => {
         this.clearLoadingTimeout();
         this.userProfile = data;
         this.populateProfileForm(data);
         this.isLoading = false;
       },
-      error: (err) => {
+      error: (err: unknown) => {
         this.lastError = err;
         console.debug('Error al cargar perfil:', err);
       }
@@ -172,7 +172,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     };
 
     this.userService.updateProfile(updatedData).subscribe({
-      next: (data) => {
+      next: (data: UserDTO) => {
         this.userProfile = data;
         this.isSavingProfile = false;
         this.isEditingProfile = false;
@@ -182,10 +182,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.successMessage = null;
         }, 3000);
       },
-      error: (err) => {
+      error: (err: unknown) => {
         console.error('Error al actualizar perfil:', err);
         this.isSavingProfile = false;
-        this.profileError = err.error?.message || 'No se pudo actualizar el perfil. Intenta nuevamente.';
+        this.profileError = this.extractErrorMessage(err) || 'No se pudo actualizar el perfil. Intenta nuevamente.';
       }
     });
   }
@@ -228,12 +228,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.successMessage = null;
 
     const passwordData: ChangePasswordRequest = {
-      currentPassword: this.passwordForm.value.currentPassword,
+      oldPassword: this.passwordForm.value.currentPassword,
       newPassword: this.passwordForm.value.newPassword
     };
 
     this.userService.changePassword(passwordData).subscribe({
-      next: (response) => {
+      next: (response: { message?: string }) => {
         this.isSavingPassword = false;
         this.isEditingPassword = false;
         this.passwordForm.reset();
@@ -243,12 +243,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.successMessage = null;
         }, 3000);
       },
-      error: (err) => {
+      error: (err: unknown) => {
         console.error('Error al cambiar contraseña:', err);
         this.isSavingPassword = false;
 
-        if (err.status === 400 || err.status === 401) {
-          this.passwordError = err.error?.message || 'La contraseña actual es incorrecta';
+        const status = (err as { status?: number })?.status;
+        if (status === 400 || status === 401) {
+          this.passwordError = this.extractErrorMessage(err) || 'La contraseña actual es incorrecta';
         } else {
           this.passwordError = 'No se pudo cambiar la contraseña. Intenta nuevamente.';
         }
