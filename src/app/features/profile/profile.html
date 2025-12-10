@@ -242,7 +242,7 @@
 
       <div *ngIf="!isEditingPassword" class="password-placeholder">
         <p>••••••••</p>
-        <span class="last-change">Última actualización: Hace 3 meses</span>
+        <span class="last-change">Última actualización: {{ getLastUpdateDisplay() }}</span>
       </div>
     </div>
   </div>

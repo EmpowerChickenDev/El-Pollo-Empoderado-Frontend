@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService, UserDTO, UpdateUserRequest, ChangePasswordRequest } from '../../services/user.service';
 import { AuthService } from '../../services/auth';
 import { Router } from '@angular/router';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +19,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   userProfile: UserDTO | null = null;
   isLoading = true;
@@ -25,6 +27,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private loadingTimeoutId: number | null = null;
   private readonly loadingTimeoutSeconds = 10;
   private lastError: unknown = null;
+  private refreshSub: Subscription | null = null;
 
   // Estados para edición
   isEditingProfile = false;
@@ -44,10 +47,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initForms();
     this.loadUserProfile();
+    this.startRefreshTimer();
   }
 
   ngOnDestroy(): void {
     this.clearLoadingTimeout();
+    if (this.refreshSub) {
+      this.refreshSub.unsubscribe();
+      this.refreshSub = null;
+    }
   }
 
   /**
@@ -106,6 +114,21 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.userService.getCurrentUserProfile().subscribe({
       next: (data: UserDTO) => {
         this.clearLoadingTimeout();
+        // Prefer any locally stored updatedAt (from recent local actions) if it's newer
+        const storageKey = `user_profile_updatedAt:${data.id ?? data.email ?? 'anon'}`;
+        const localTs = localStorage.getItem(storageKey);
+        if (localTs) {
+          try {
+            const localDate = new Date(localTs);
+            const serverDate = new Date(data.updatedAt || data.createdAt || 0);
+            if (!isNaN(localDate.getTime()) && localDate.getTime() > serverDate.getTime()) {
+              (data as UserDTO).updatedAt = localTs;
+            }
+          } catch {
+            // ignore parse errors
+          }
+        }
+
         this.userProfile = data;
         this.populateProfileForm(data);
         this.isLoading = false;
@@ -178,6 +201,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.isEditingProfile = false;
         this.successMessage = 'Perfil actualizado correctamente';
 
+        // Persist an updatedAt locally so UI reflects the change immediately across navigation
+        try {
+          const nowIso = new Date().toISOString();
+          (this.userProfile as UserDTO).updatedAt = nowIso;
+          const key = `user_profile_updatedAt:${data.id ?? data.email ?? 'anon'}`;
+          localStorage.setItem(key, nowIso);
+        } catch {
+          // noop
+        }
+
         setTimeout(() => {
           this.successMessage = null;
         }, 3000);
@@ -236,6 +269,26 @@ export class ProfileComponent implements OnInit, OnDestroy {
       next: (response: { message?: string }) => {
         this.isSavingPassword = false;
         this.isEditingPassword = false;
+
+        // Actualizar en memoria la marca de tiempo para que la UI muestre
+        // 'Hace un momento' inmediatamente sin tener que esperar una recarga.
+        if (this.userProfile) {
+          const nowIso = new Date().toISOString();
+          (this.userProfile as UserDTO).updatedAt = nowIso;
+          try {
+            this.cdr.detectChanges();
+          } catch {
+            // noop
+          }
+          // Persist locally so navigation away/back keeps the recent timestamp
+          const key = `user_profile_updatedAt:${(this.userProfile as UserDTO).id ?? (this.userProfile as UserDTO).email ?? 'anon'}`;
+          try {
+            localStorage.setItem(key, nowIso);
+          } catch {
+            // ignore localStorage errors (e.g., storage disabled)
+          }
+        }
+
         this.passwordForm.reset();
         this.successMessage = response.message || 'Contraseña actualizada correctamente';
 
@@ -317,5 +370,68 @@ export class ProfileComponent implements OnInit, OnDestroy {
       }
     }
     return null;
+  }
+
+  /**
+   * Devuelve una cadena legible en español que indica cuánto tiempo ha pasado
+   * desde la fecha proporcionada (iso string). Usa `updatedAt` si está disponible
+   * en `userProfile`, si no, cae en `createdAt`.
+   */
+  getLastUpdateDisplay(): string {
+    interface MaybeDates { updatedAt?: string; createdAt?: string }
+    const dates = this.userProfile as unknown as MaybeDates | undefined;
+    const iso = dates?.updatedAt || dates?.createdAt;
+    if (!iso) {
+      return 'Desconocida';
+    }
+
+    try {
+      const date = new Date(iso);
+      return this.timeAgo(date);
+    } catch {
+      return 'Desconocida';
+    }
+  }
+
+  private timeAgo(date: Date): string {
+    const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+    if (seconds < 0) return 'ahora';
+
+    // Si es muy reciente, mostramos 'Hace un momento' para mejor UX.
+    if (seconds < 60) return 'Hace un momento';
+
+    const intervals: [number, string, string][] = [
+      [60, 'segundo', 'segundos'],
+      [60 * 60, 'minuto', 'minutos'],
+      [60 * 60 * 24, 'hora', 'horas'],
+      [60 * 60 * 24 * 30, 'día', 'días'],
+      [60 * 60 * 24 * 365, 'mes', 'meses']
+    ];
+
+
+    for (let i = 1; i < intervals.length; i++) {
+      const [limit, singular, plural] = intervals[i];
+      const previousLimit = intervals[i - 1][0];
+      if (seconds < limit) {
+        const value = Math.floor(seconds / previousLimit);
+        const unit = value === 1 ? singular : plural;
+        return `Hace ${value} ${unit}`;
+      }
+    }
+
+    const years = Math.floor(seconds / (60 * 60 * 24 * 365));
+    return `Hace ${years} ${years === 1 ? 'año' : 'años'}`;
+  }
+
+  /** Start a periodic timer to refresh the relative time text every 30 seconds. */
+  private startRefreshTimer(): void {
+    if (this.refreshSub) return;
+    this.refreshSub = interval(30000).subscribe(() => {
+      try {
+        this.cdr.detectChanges();
+      } catch {
+        // noop
+      }
+    });
   }
 }
