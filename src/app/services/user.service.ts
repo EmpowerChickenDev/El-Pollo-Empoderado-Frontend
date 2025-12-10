@@ -25,7 +25,7 @@ export interface UpdateUserRequest {
 }
 
 export interface ChangePasswordRequest {
-  currentPassword: string;
+  oldPassword: string;
   newPassword: string;
 }
 
@@ -87,10 +87,27 @@ export class UserService {
     if (environment.enableDebug) {
       console.log('[UserService] PUT /api/user/me/password');
     }
-    
-    return this.http.put<{ message: string }>(`${this.apiUrl}/me/password`, passwordData, {
-      headers: this.authService.getAuthHeaders()
-    }).pipe(
+    // Build payload matching backend DTO: { oldPassword, newPassword }
+    const payload: Record<string, unknown> = {
+      oldPassword: passwordData.oldPassword,
+      newPassword: passwordData.newPassword
+    };
+
+    // Debug: log presence/lengths (never actual passwords)
+    if (environment.enableDebug) {
+      const hasOld = Object.prototype.hasOwnProperty.call(payload, 'oldPassword');
+      const hasNew = Object.prototype.hasOwnProperty.call(payload, 'newPassword');
+      const lengths = {
+        oldPasswordLength: payload['oldPassword'] ? String(payload['oldPassword']).length : 0,
+        newPasswordLength: payload['newPassword'] ? String(payload['newPassword']).length : 0
+      };
+      console.debug('[UserService] changePassword payload keys:', { hasOld, hasNew, lengths });
+    }
+
+    const url = `${this.apiUrl}/me/password`;
+    const headers = this.authService.getAuthHeaders().set('Content-Type', 'application/json');
+
+    return this.http.put<{ message: string }>(url, JSON.stringify(payload), { headers }).pipe(
       tap(response => {
         if (environment.enableDebug) {
           console.log('[UserService] Contraseña cambiada:', response);
