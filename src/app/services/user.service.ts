@@ -12,6 +12,7 @@ export interface UserDTO {
   email: string;
   dni: string;
   birthDate: string;
+  updatedAt?: string;
   address?: string;
   roles: string[];
   createdAt: string;
