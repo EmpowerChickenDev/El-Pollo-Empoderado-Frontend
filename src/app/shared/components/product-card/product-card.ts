@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Product } from '../../../core/models/product.model';
 import { resolveImageUrl } from '../../../core/utils/image.util';
+import { CartService } from '../../../core/services/cart.service';
 
 @Component({
   selector: 'app-product-card',
@@ -238,6 +239,7 @@ import { resolveImageUrl } from '../../../core/utils/image.util';
 })
 export class ProductCardComponent {
   @Input() product!: Product;
+  private cartService = inject(CartService);
 
   get imgSrc(): string {
     // Prioriza `imageUrl` (backend camelCase), luego `imagen` (mocks/legacy)
@@ -249,7 +251,6 @@ export class ProductCardComponent {
   }
 
   agregarProducto() {
-    console.log('Producto agregado:', this.product);
-    alert(` ${this.product.nombre} agregado al carrito`);
+    this.cartService.addItem(this.product);
   }
 }

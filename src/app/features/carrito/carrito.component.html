@@ -57,6 +57,13 @@
       <a href="#" class="back-link">
         <i class="fas fa-arrow-left"></i> Seguir comprando
       </a>
+
+      <div class="recommendations-section" *ngIf="recomendaciones.length > 0">
+        <h2 class="recommendations-title">¡Completa tu pedido!</h2>
+        <div class="recommendations-grid">
+          <app-product-card *ngFor="let prod of recomendaciones" [product]="prod" class="mini-card" />
+        </div>
+      </div>
     </div>
 
     <div class="cart-summary">
@@ -80,8 +87,10 @@
           <span>S/15.90</span>
         </div>
 
-        <button class="btn-checkout" (click)="navegarAEnvio()">Finalizar compra</button>
+        <button class="btn-checkout" (click)="navegarAEnvio()">Siguiente</button>
       </div>
     </div>
   </div>
+
+
 </div>

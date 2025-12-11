@@ -19,6 +19,9 @@ export class EnvioComponent implements OnInit {
     costoEnvio = 5.00;
     total = 0;
 
+    // Mock user email for invoice
+    userEmail = 'juan.perez@example.com';
+
     private fb = inject(FormBuilder);
 
     ngOnInit(): void {
