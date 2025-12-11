@@ -1,58 +1,57 @@
-<div class="sidebar-overlay" 
-     [class.active]="cartService.isSidebarOpen()" 
-     (click)="closeSidebar()">
+<div class="sidebar-overlay" [class.active]="cartService.isSidebarOpen()" (click)="closeSidebar()"
+    (keydown.enter)="closeSidebar()" tabindex="0" role="button" aria-label="Cerrar carrito">
 </div>
 
 <div class="sidebar-container" [class.open]="cartService.isSidebarOpen()">
-  <div class="sidebar-header">
-    <h2>Tu Pedido</h2>
-    <button class="close-btn" (click)="closeSidebar()">
-      <i class="bx bx-x"></i>
-    </button>
-  </div>
-
-  <div class="sidebar-body">
-    <div *ngIf="cartService.cartItems().length === 0" class="empty-cart">
-      <i class="bx bx-cart-alt"></i>
-      <p>Tu carrito está vacío</p>
-      <button class="btn-continue" (click)="closeSidebar()">Seguir comprando</button>
-    </div>
-
-    <div class="cart-items-list" *ngIf="cartService.cartItems().length > 0">
-      <div class="cart-item-card" *ngFor="let item of cartService.cartItems()">
-        <button class="remove-btn" (click)="removeItem(item.id)">
-          <i class="bx bx-x"></i>
+    <div class="sidebar-header">
+        <h2>Tu Pedido</h2>
+        <button class="close-btn" (click)="closeSidebar()">
+            <i class="bx bx-x"></i>
         </button>
-        
-        <div class="item-image">
-          <img [src]="item.imagen" [alt]="item.nombre">
+    </div>
+
+    <div class="sidebar-body">
+        <div *ngIf="cartService.cartItems().length === 0" class="empty-cart">
+            <i class="bx bx-cart-alt"></i>
+            <p>Tu carrito está vacío</p>
+            <button class="btn-continue" (click)="closeSidebar()">Seguir comprando</button>
         </div>
 
-        <div class="item-details">
-          <h3 class="item-name">{{ item.nombre }}</h3>
-          <p class="item-price">S/ {{ item.precio | number:'1.2-2' }}</p>
-          
-          <div class="quantity-controls">
-            <button class="qty-btn" (click)="decreaseQuantity(item.id, item.quantity)">-</button>
-            <span class="qty-value">{{ item.quantity }}</span>
-            <button class="qty-btn" (click)="increaseQuantity(item.id, item.quantity)">+</button>
-          </div>
-        </div>
-        
-        <div class="item-subtotal">
-          S/ {{ item.subtotal | number:'1.2-2' }}
-        </div>
-      </div>
-    </div>
-  </div>
+        <div class="cart-items-list" *ngIf="cartService.cartItems().length > 0">
+            <div class="cart-item-card" *ngFor="let item of cartService.cartItems()">
+                <button class="remove-btn" (click)="removeItem(item.id)">
+                    <i class="bx bx-x"></i>
+                </button>
 
-  <div class="sidebar-footer" *ngIf="cartService.cartItems().length > 0">
-    <div class="total-row">
-      <span>Total:</span>
-      <span class="total-amount">S/ {{ cartService.total() | number:'1.2-2' }}</span>
+                <div class="item-image">
+                    <img [src]="item.imagen" [alt]="item.nombre">
+                </div>
+
+                <div class="item-details">
+                    <h3 class="item-name">{{ item.nombre }}</h3>
+                    <p class="item-price">S/ {{ item.precio | number:'1.2-2' }}</p>
+
+                    <div class="quantity-controls">
+                        <button class="qty-btn" (click)="decreaseQuantity(item.id, item.quantity)">-</button>
+                        <span class="qty-value">{{ item.quantity }}</span>
+                        <button class="qty-btn" (click)="increaseQuantity(item.id, item.quantity)">+</button>
+                    </div>
+                </div>
+
+                <div class="item-subtotal">
+                    S/ {{ item.subtotal | number:'1.2-2' }}
+                </div>
+            </div>
+        </div>
     </div>
-    <a routerLink="/carrito" class="btn-checkout" (click)="closeSidebar()">
-      Proceder al Pago
-    </a>
-  </div>
+
+    <div class="sidebar-footer" *ngIf="cartService.cartItems().length > 0">
+        <div class="total-row">
+            <span>Total:</span>
+            <span class="total-amount">S/ {{ cartService.total() | number:'1.2-2' }}</span>
+        </div>
+        <a routerLink="/carrito" class="btn-checkout" (click)="closeSidebar()">
+            Proceder al Pago
+        </a>
+    </div>
 </div>
