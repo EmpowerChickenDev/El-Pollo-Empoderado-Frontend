@@ -1,9 +1,8 @@
 <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
-<link rel="stylesheet" href="register.css">
 
 <div class="register__container">
     <div class="register__item">
-        <form class="form firstSection__item">
+        <form class="form firstSection__item" (ngSubmit)="onSubmit($event)">
             <div class="form__item">
                 <h1 class="register__title">
                     Crear Cuenta
@@ -12,91 +11,204 @@
                     Información personal
                 </span>
             </div>
+
+            <!-- Mensaje de error -->
+            <div *ngIf="errorMessage" class="error-message">
+                {{ errorMessage }}
+            </div>
+
             <div class="form__item">
                 <label class="form__label" for="name">
                     Nombre
                 </label>
-                <input class="form__input" id="name" type="text" placeholder="Ej. Camila" required>
+                <input 
+                    class="form__input" 
+                    id="name" 
+                    type="text" 
+                    placeholder="Ej. Camila" 
+                    [(ngModel)]="name"
+                    name="name"
+                    [disabled]="isLoading"
+                    required>
             </div>
+
             <div class="form__item">
                 <label class="form__label" for="last-name">
                     Apellidos
                 </label>
-                <input class="form__input" id="last-name" type="text" placeholder="Ej. Torres" required>
+                <input 
+                    class="form__input" 
+                    id="last-name" 
+                    type="text" 
+                    placeholder="Ej. Torres" 
+                    [(ngModel)]="lastName"
+                    name="lastName"
+                    [disabled]="isLoading"
+                    required>
             </div>
+
             <div class="form__item">
                 <label class="form__label" for="dni">
                     DNI
                 </label>
-                <input class="form__input" id="dni" type="number" maxlength="8" placeholder="DNI 12345678" required>
+                <input 
+                    class="form__input" 
+                    id="dni" 
+                    type="text" 
+                    maxlength="8" 
+                    placeholder="DNI 12345678" 
+                    [(ngModel)]="dni"
+                    name="dni"
+                    [disabled]="isLoading"
+                    required>
             </div>
+
             <div class="form__item">
-                <label class="form__label" for="phone">
-                    Número de teléfono
+                <label class="form__label" for="address">
+                    Dirección
                 </label>
-                <input class="form__input" id="phone" type="number" maxlength="9" pattern="[0-9]{9}" inputmode="numeric" required>
+                <input 
+                    class="form__input" 
+                    id="address" 
+                    type="text" 
+                    placeholder="Calle, número, distrito"
+                    [(ngModel)]="address"
+                    name="address"
+                    [disabled]="isLoading"
+                    required>
             </div>
+
             <div class="form__item">
                 <label class="form__label" for="birth-date">
                     Fecha de nacimiento
                 </label>
-                <input class="form__input" type="date" id="birth-date" placeholder="DNI 12345678" required>
+                <input 
+                    class="form__input" 
+                    type="date" 
+                    id="birth-date" 
+                    [(ngModel)]="birthDate"
+                    name="birthDate"
+                    [disabled]="isLoading"
+                    required>
             </div>
+
             <div class="form__item">
                 <span class="subtitle__register second-subtitle">
                     Información de inicio de sesión
                 </span>
             </div>
+
             <div class="form__item">
                 <label class="form__label" for="email">
                     Correo electrónico
                 </label>
-                <input class="form__input" type="email" id="email" placeholder="Ej. nombre@gmail.com" required>
+                <input 
+                    class="form__input" 
+                    type="email" 
+                    id="email" 
+                    placeholder="Ej. nombre@gmail.com" 
+                    [(ngModel)]="email"
+                    name="email"
+                    [disabled]="isLoading"
+                    required>
             </div>
+
             <div class="form__item">
                 <label class="form__label" for="password">
                     Contraseña
                 </label>
                 <div class="password">
-                    <input class="form__input form-input__password" id="password" type="password" placeholder="Aa12345" required>
-                    <button class="btn__password" type="button" id="togglePassword" aria-label="Mostrar contraseña"title="Mostrar / Ocultar contraseña">
-                        <i class='bxr  bx-eye toggle-password' id="togglePassword"></i>
+                    <input 
+                        class="form__input form-input__password" 
+                        id="password" 
+                        [type]="showPassword ? 'text' : 'password'" 
+                        placeholder="Mínimo 6 caracteres" 
+                        [(ngModel)]="password"
+                        name="password"
+                        [disabled]="isLoading"
+                        required>
+                    <button 
+                        class="btn__password" 
+                        type="button" 
+                        (click)="togglePasswordVisibility()" 
+                        aria-label="Mostrar contraseña"
+                        title="Mostrar / Ocultar contraseña">
+                        <i class='bxr' [ngClass]="showPassword ? 'bx-eye-off' : 'bx-eye'"></i>
                     </button>
                 </div>
+            </div>
+
+            <div class="form__item">
+                <label for="confirm-password" class="form__label">
+                    Confirmar contraseña
+                </label>
                 <div class="password">
-                    <label for="confirm-password" class="form__label">
-                        Confirmar contraseña
-                    </label>
-                    <div class="password">
-                        <input class="form__input form-input__password" id="confirm-password" type="password" placeholder="Aa12345" required>
-                        <button class="btn__password" type="button" id="togglePassword" aria-label="Mostrar contraseña"title="Mostrar / Ocultar contraseña">
-                            <i class='bxr  bx-eye toggle-password' id="togglePassword"></i>
-                        </button>
-                    </div>
+                    <input 
+                        class="form__input form-input__password" 
+                        id="confirm-password" 
+                        [type]="showConfirmPassword ? 'text' : 'password'" 
+                        placeholder="Repite tu contraseña" 
+                        [(ngModel)]="confirmPassword"
+                        name="confirmPassword"
+                        [disabled]="isLoading"
+                        required>
+                    <button 
+                        class="btn__password" 
+                        type="button" 
+                        (click)="toggleConfirmPasswordVisibility()" 
+                        aria-label="Mostrar contraseña"
+                        title="Mostrar / Ocultar contraseña">
+                        <i class='bxr' [ngClass]="showConfirmPassword ? 'bx-eye-off' : 'bx-eye'"></i>
+                    </button>
                 </div>
             </div>
+
             <div class="form__item">
                 <span>
                     Al registrarse aceptas nuestros términos y condiciones y nuestra política de <br>
                     tratamiento de datos personales
                 </span>
             </div>
+
             <div class="form__item checkbox__container">
                 <div class="form__checkbox">
-                    <input type="checkbox" id="acceptTerms" required>
+                    <input 
+                        type="checkbox" 
+                        id="acceptTerms" 
+                        [(ngModel)]="acceptTerms"
+                        name="acceptTerms"
+                        [disabled]="isLoading"
+                        required>
                     <label for="acceptTerms">
                         Acepto recibir <a href="#" class="terms__link">promociones y novedades</a>
                     </label>
                 </div>
                 <div class="form__checkbox">
-                    <input type="checkbox" id="acceptPrivacy" required>
+                    <input 
+                        type="checkbox" 
+                        id="acceptPrivacy" 
+                        [(ngModel)]="acceptPrivacy"
+                        name="acceptPrivacy"
+                        [disabled]="isLoading"
+                        required>
                     <label for="acceptPrivacy">
-                        Acepto la transferencia de datos a<a href="#" class="terms__link">empresas asociadas</a>
+                        Acepto la transferencia de datos a <a href="#" class="terms__link">empresas asociadas</a>
                     </label>
                 </div>
             </div>
+
             <div class="form__item">
-                <button type="submit" class="btn__register">Registrate</button>
+                <button 
+                    type="submit" 
+                    class="btn__register"
+                    [disabled]="isLoading">
+                    {{ isLoading ? 'Registrando...' : 'Registrarse' }}
+                </button>
+            </div>
+
+            <div class="form__item form__item--center">
+                <span class="form__text">¿Ya tienes una cuenta?</span>
+                <a routerLink="/login" class="form__link">Iniciar Sesión</a>
             </div>
         </form>
     </div>

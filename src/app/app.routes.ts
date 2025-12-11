@@ -16,6 +16,9 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout';
 import { PublicLayoutComponent } from './layouts/public-layout/public-layout';
 import { BlankLayoutComponent } from './layouts/blank-layout/blank-layout';
 
+import { authGuard } from './guards/auth-guard';
+import { ProfileComponent } from './features/profile/profile';
+
 export const routes: Routes = [
     // Rutas públicas con navbar + navbarMenu + footer
     {
@@ -39,7 +42,9 @@ export const routes: Routes = [
             
             { path: 'locales', component: LocalesComponent },
             { path: 'pedidos', component: PedidosComponent },
-            { path: 'carrito', component: CarritoComponent }
+            { path: 'carrito', component: CarritoComponent },
+            { path: 'profile', component: ProfileComponent,canActivate: [authGuard]}
+
         ]
     },
 

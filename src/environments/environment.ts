@@ -1,9 +1,10 @@
 // Este archivo es generado automáticamente
 // NO EDITAR MANUALMENTE
+// Ambiente: LOCAL
 
 export const environment = {
   production: false,
-  apiUrl: 'https://el-pollo-empoderado-backend-production.up.railway.app/',
+  apiUrl: 'http://localhost:8080',
   apiPrefix: '/api',
   apiVersion: '',
   appName: 'El Pollo Empoderado',
